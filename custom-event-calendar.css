@@ -1,0 +1,343 @@
+.custom-event-calendar {
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.calendar-controls {
+    margin-bottom: 20px;
+}
+
+/* Styles for the select row */
+.select-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Styles for columns */
+.select-col {
+    flex: 1;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    /* Add some space between columns */
+}
+.select-col-right {
+    flex: 1;
+    /* do not add space to right */
+}
+
+/* Styles for the select elements */
+.month-select{
+    width: 100%;
+    /* Each select box takes 48% of the container width */
+    margin-right: 10px;
+    /* Add some space between select boxes */
+}
+
+.year-select {
+    width: 100%;
+}
+
+/* Media query for smaller screens (e.g., mobile devices) */
+@media screen and (max-width: 768px) {
+
+    /* Stack select boxes and buttons on top of each other */
+    .select-row,
+    .button-row {
+        flex-direction: column;
+    }
+
+    /* Reset width and margin for select boxes to take full width */
+    .month-select,
+    .year-select {
+        width: 100%;
+        margin-right: 0;
+        /* No margin between select boxes */
+    }
+}
+
+.calendar-title {
+	background-color: rgba(255, 255, 255, 0.5); 
+    padding: 5px 10px; 
+    border-radius: 5px; 
+}
+
+/* Calendar container */
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid #ccc;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-around;
+}
+
+.header-day {
+    flex: 1;
+    text-align: center;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.calendar-row {
+    display: flex;
+    justify-content: space-around;
+}
+
+.calendar-cell {
+    flex: 1;
+    width: calc(100% / 7);
+    /* Set the width to one-seventh of the container width */
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.empty-cell {
+    flex: 1;
+    width: calc(100% / 7);
+    /* Set the width to one-seventh of the container width */
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+
+/* Calendar cell with events */
+.calendar-cell.has-event {
+    background-color: #ffcccb;
+    /* Example background color for cells with events */
+}
+
+/* Day number */
+.day {
+    font-weight: bold;
+}
+
+/* Event icon */
+.event a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Tooltip */
+.tooltip {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+/* Show tooltip on hover */
+.event:hover .tooltip {
+    display: block;
+}
+
+.color-1 {
+    background-color:rgba(182, 195, 243, 0.5); 
+}
+.color-2 {
+    background-color:rgba(182, 195, 243, 0.5); 
+}
+
+.color-3 {
+    background-color:rgba(182, 195, 243, 0.5); 
+}
+
+/* Adjust the width of empty cells in the last row */
+.calendar-row:last-child .empty-cell {
+    flex-grow: 1;
+    /* Let empty cells grow to fill the remaining space */
+    width: auto;
+    /* Set width to auto to allow flexibility */
+}
+
+.calendar {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.calendar .event {
+    position: relative;
+    /* Enable positioning of tooltip */
+    overflow: hidden;
+    /* Hide overflowing content */
+}
+
+.has-event i {
+    display: block;
+    margin-bottom: 2px;
+    /* Add some space between icon and text */
+}
+
+.special_day {
+    color: red!important;
+}
+
+.calendar-controls select {
+    border-radius: 4px;		
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+}
+
+/* Hover effect */
+.calendar-controls select:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Add larger shadow on hover */
+}
+
+.v-events-section {
+	 border: 1px solid #ccc;
+	 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   border-radius: 10px;
+	 padding: 20px;
+}
+
+/* For event list view */
+.v-event-row {
+    display: flex;
+    flex-wrap: nowrap; /* Prevent wrapping to multiple rows */
+    align-items: flex-start; /* Align items to the top */
+}
+
+.v-event-row > * {
+    margin-right: 10px; /* Space between fields */
+}
+
+.v-event-date {
+    width: 100px; /* Fixed width for date field */
+}
+
+.v-event-title,
+.v-event-location,
+.v-event-venue {
+    flex: 1; /* Equal width for all columns */
+    text-align: left; /* Align text left */
+    white-space: nowrap; /* Prevent wrapping inside each field */
+}
+
+.v-event-row > * {
+    margin-right: 10px; /* Space between fields */
+    margin-bottom: 15px; /* Increased space between fields for better clarity */
+    color: #333; /* Deep gray color for text */
+}
+
+.v-event-date {
+    width: auto; /* Adjusts width as needed, more flexible for mobile */
+    flex-shrink: 0; /* Prevents the date field from shrinking */
+    font-size: 18px; /* Optimized font size for readability */
+}
+
+.v-event-title,
+.v-event-location,
+.v-event-venue {
+    flex: 1; /* Equal width for title, location, and venue */
+    text-align: left; /* Aligns text to the left */
+    font-size: 18px; /* Increased font size for readability */
+    white-space: normal; /* Allows text to wrap */
+    overflow: visible; /* Ensures text is visible */
+}
+
+/* Ensuring event title is bold and has a fancy effect */
+.v-event-title {
+    font-weight: bold !important; /* Ensures bold style is applied */
+    color: #555; /* Gray color for a more subdued look */
+    text-shadow: 1px 1px 2px #ccc; /* Adds a subtle shadow for depth */
+}
+
+/* Adding extra space to the top of the first event */
+.v-event-row:first-child {
+    margin-top: 20px; /* Adds extra space above the first event */
+}
+
+.v-event-row {
+    margin-bottom: 25px; /* Increases space between events */
+    line-height: 1.5; /* Improved line height for readability */
+}
+
+@media (max-width: 768px) {
+    .v-event-title,
+    .v-event-venue {
+        display: none; /* Hides title and venue on mobile devices */
+    }
+
+    .v-event-row {
+        flex-direction: column; /* Stacks details vertically on smaller screens */
+    }
+
+    .v-event-row > * {
+        margin-right: 0; /* Adjusts margins for smaller screens */
+    }
+
+    .v-event-date,
+    .v-event-location {
+        font-size: 16px; /* Adjusts font size for mobile devices */
+    }
+
+    /* Adjusting for the first event in mobile view as well */
+    .v-event-row:first-child {
+        margin-top: 20px; /* Ensures consistency in spacing at the top for the first event on mobile */
+    }
+}
+
+.happy-birthday-animation {
+    position: absolute;
+    top: 50%;
+    left: -300px; /* Initial position off the left side of the screen */
+    animation: slideRight 10s linear forwards; /* Adjust the duration (10s) as needed */
+    display: none;
+}
+
+.text {
+    font-size: 36px;
+    font-weight: bold;
+    color: red!important;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+@keyframes slideRight {
+    0% {
+        left: -300px; /* Start position */
+    }
+    100% {
+        left: calc(100% + 300px); /* End position (right edge of the screen + 300px) */
+    }
+}
+
+/* Apply styles to the tooltip */
+.event[title]:hover::after {
+    content: attr(title);  /* Use the 'title' attribute as content */
+    position: absolute;  /* Position the tooltip */
+    background-color: #333;  /* Background color */
+    color: #fff;  /* Text color */
+    padding: 5px;  /* Add padding */
+    border-radius: 5px;  /* Add rounded corners */
+    font-size: 14px;  /* Font size */
+    z-index: 1;  /* Ensure tooltip is on top of other elements */
+    /* Additional styling properties as needed */
+}
+
+.calendar-container {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.calendar-header {
+    background-color: rgba(255, 255, 255);
+}
+.event-group {
+    display:flex;
+    flex-wrap: wrap;
+}
+.has-event{
+    flex: 1 0 calc(33% - 10px); /* Distributes available space equally among the flex items with a maximum of 4 items per row */
+    max-width: calc(33% - 10px); /* Sets the maximum width for each flex item */
+    margin: 5px; /* Adds margin between flex items */
+}
