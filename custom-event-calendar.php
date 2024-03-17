@@ -235,25 +235,32 @@ function generateEventsCalendar($month, $year)
         $special_class = '';
         $special_icon = '';
         //511 the special day!!!
+
+
+        $bossBDayEvent = null;
         if ($month == 5 && $day == 11) {
+            $bossBDayEvent = array();
+            $bossBDayEvent['title'] = 'Happy Birday Boss!';
+            $bossBDayEvent['icon'] = 'fa-birthday-cake';
             $special_class .= ' special_day';
-            $special_icon .= '<div class="event has-event" title="Happy Birthday!!!"><a href="javascript:startBirthdayAnimation();" >';
-            $special_icon .= '<i class="fas fa-birthday-cake"></i></a></div>';
             $event_count++;
         }
 
          // Determine the color for the day based on the number of events
          $color_class = 'color-' . $event_count;
-
         // Add the day cell with events
         $calendar_html .= '<div class="calendar-cell event ' . $color_class . '">';
         $calendar_html .= '<span class=day ' . $special_class . '">' . $day . '</span>';
-        $calendar_html .= $special_icon;
-
 
         // Display events for the day
         if ( $event_count > 0){
 	        $calendar_html .= '<div class="event-group">';
+
+            if ($bossBDayEvent){
+                $calendar_html .= '<div class="event has-event" title="' . $bossBDayEvent["title"] . '"><a href="javascript:startBirthdayAnimation();" >';
+                $calendar_html .= '<i class="fas fa-birthday-cake"></i></a></div>';
+            }
+
             foreach ($day_events as $event) {
                 $calendar_html .= '<div class="event has-event" title="' . $event["title"] . '">';
                 $event_icon = isset($event["icon"]) ? $event["icon"] : "fa-calendar";
