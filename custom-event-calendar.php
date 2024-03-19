@@ -240,7 +240,7 @@ function generateEventsCalendar($month, $year)
         $bossBDayEvent = null;
         if ($month == 5 && $day == 11) {
             $bossBDayEvent = array();
-            $bossBDayEvent['title'] = 'Happy Birday Boss!';
+            $bossBDayEvent['title'] = '生日快乐 Happy Birthday Boss!';
             $bossBDayEvent['icon'] = 'fa-birthday-cake';
             $special_class .= ' special_day';
             $event_count++;
@@ -264,7 +264,7 @@ function generateEventsCalendar($month, $year)
             foreach ($day_events as $event) {
                 $calendar_html .= '<div class="event has-event" title="' . $event["title"] . '">';
                 $event_icon = isset($event["icon"]) ? $event["icon"] : "fa-calendar";
-                if(isset($event["url"])){
+                if(isset($event["url"]) && !empty($event["url"])){
                     $calendar_html .= '<a href="' . $event["url"] . '">';
                     $calendar_html .= '<i class="fas ' . $event_icon . '"></i></a></div>';
                 } else {
