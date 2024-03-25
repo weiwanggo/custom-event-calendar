@@ -5,122 +5,11 @@ Description: Customizes the event calendar settings.
 Version: 1.0
 Author: Your Name
 */
-// create custom DB table
-
-// Add settings page
-function custom_event_calendar_settings_page() {
-    ?>
-    <div class="wrap">
-        <h2>Custom Event Calendar Settings</h2>
-        <!-- Preview Section -->
-        <h2>Preview?</h2>
-        <div id="event-calendar-preview" style="max-width: 600px;">
-            <?php 
-            // Enqueue calendar CSS styles
-            wp_enqueue_style('custom-event-calendar-styles', plugins_url('../custom-event-calendar.css', __FILE__));
-
-            // Enqueue calendar JavaScript
-            wp_enqueue_script('custom-event-calendar', plugins_url('../custom-event-calendar.js', __FILE__), array('jquery'), '1.0', true);
-
-            // Localize the script with the AJAX URL
-            wp_localize_script('custom-event-calendar', 'custom_event_calendar_ajax', array('ajaxurl' => admin_url('admin-ajax.php')));
-
-            // Add inline CSS for background image
-            $background_image = get_option('custom_event_calendar_background_image');
-            $background_color = get_option('custom_event_calendar_background_color');
-            $text_color = get_option('custom_event_calendar_text_color');
-            if ($background_image || $background_color || $text_color) {
-                echo '<style type="text/css">';
-                echo '.custom-event-calendar {';
-                if ($background_color) {
-                    echo '  background-color: ' . esc_attr($background_color) . ';';
-                }
-                if ($background_image){
-                    echo '  background-image: url("' . esc_url($background_image) . '");';
-                }
-                echo '  background-size: cover;';
-                echo '  background-position: center;';
-                echo '}';
-                if ($text_color){
-                    echo '.calendar .day, .calendar th {color: ' . $text_color . '}';
-                }
-                echo '</style>';
-            }
-
-            echo do_shortcode('[custom_event_calendar]');
-            ?>  
-        </div>
-        <form method="post" action="options.php">
-            <?php settings_fields('custom_event_calendar_options'); ?>
-            <?php do_settings_sections('custom_event_calendar_options'); ?>
-            <button id="preview-button" type="button" class="button button-primary">Preview</button>
-            <input type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes'); ?>">
-        </form>
-    </div>
-
-    <?php
-}
-
-// Initialize settings
-function custom_event_calendar_settings_init() {
-    // Register settings fields
-    register_setting('custom_event_calendar_options', 'custom_event_calendar_background_color');
-    register_setting('custom_event_calendar_options', 'custom_event_calendar_text_color');
-    register_setting('custom_event_calendar_options', 'custom_event_calendar_background_image');
-    register_setting('custom_event_calendar_options', 'custom_event_calendar_layout');
-
-    // Add settings section
-    add_settings_section('custom_event_calendar_section', 'Calendar Settings', 'custom_event_calendar_section_callback', 'custom_event_calendar_options');
-
-    // Add settings fields
-    add_settings_field('custom_event_calendar_background_color_field', 'Background Color', 'custom_event_calendar_background_color_field_callback', 'custom_event_calendar_options', 'custom_event_calendar_section');
-    add_settings_field('custom_event_calendar_text_color_field', 'Text Color', 'custom_event_calendar_text_color_field_callback', 'custom_event_calendar_options', 'custom_event_calendar_section');
-    add_settings_field('custom_event_calendar_background_image_field', 'Background Image', 'custom_event_calendar_background_image_field_callback', 'custom_event_calendar_options', 'custom_event_calendar_section');
-    add_settings_field('custom_event_calendar_layout_field', 'Layout Opotion', 'custom_event_calendar_layout_field_callback', 'custom_event_calendar_options', 'custom_event_calendar_section');
-}
-add_action('admin_init', 'custom_event_calendar_settings_init');
-
-// Callback function for the settings section
-function custom_event_calendar_section_callback() {
-    echo '<p>Customize your calendar settings here.</p>';
-}
-
-// Callback function for the background color field
-function custom_event_calendar_background_color_field_callback() {
-    $background_color = get_option('custom_event_calendar_background_color', '#ffffff');
-    echo '<input type="text" class="color-picker" name="background_color" value="' . esc_attr($background_color) . '">';
-}
-
-function custom_event_calendar_text_color_field_callback() {
-    $text_color = get_option('custom_event_calendar_text_color', '#ffffff');
-    echo '<input type="text" class="color-picker" name="text_color" value="' . esc_attr($text_color) . '">';
-}
-
-// Callback function for the background image field
-function custom_event_calendar_background_image_field_callback() {
-    $background_image = get_option('custom_event_calendar_background_image', '');
-    echo '<input type="text" name="custom_event_calendar_background_image" value="' . esc_attr($background_image) . '"> <input type="button" class="button-secondary upload-button" value="Upload Image">';
-}
-
-// Callback function for the Layout
-function custom_event_calendar_layout_field_callback() {
-    $calendar_layout = get_option('custom_event_calendar_layout', '');
-    echo '<input type="text" name="custom_event_calendar_layout" value="' . esc_attr($calendar_layout) . '">';
-}
 function custom_event_calendar_add_menu() {
     add_menu_page(
         'Custom Event Calendar Settings', // Page title
         'Event Calendar', // Menu title
         'manage_options', // Capability required to access the menu page
-        'custom-event-calendar-settings', // Menu slug
-        'custom_event_calendar_settings_page' // Callback function to render the menu page
-    );
-    // Add a submenu for custom events
-    add_submenu_page(
-        'custom-event-calendar-settings', // Parent menu slug
-        'Custom Events', // Page title
-        'Custom Events', // Menu title
-        'manage_options', // Capability required to access the submenu page
         'custom_event_calendar_event_editor', // Menu slug
         'custom_event_calendar_event_editor_page' // Callback function to render the submenu page
     );
@@ -128,13 +17,13 @@ function custom_event_calendar_add_menu() {
 add_action('admin_menu', 'custom_event_calendar_add_menu');
 
 // Enqueue scripts and styles for color picker and media uploader
+/*
 function custom_event_calendar_admin_scripts() {
-    wp_enqueue_script('wp-color-picker');
     wp_enqueue_script('custom-event-calendar-admin-script', plugin_dir_url(__FILE__) . '../js/admin-script.js', array('jquery', 'wp-color-picker'), '1.0', true);
     wp_enqueue_media();
 }
 add_action('admin_enqueue_scripts', 'custom_event_calendar_admin_scripts');
-
+*/
 function custom_event_calendar_event_editor_page() {
     // Handle form submissions
     if (isset($_POST['submit'])) {

@@ -8,6 +8,7 @@ Description: Display events on a calendar based on the _wolf_event_start_date po
 require_once plugin_dir_path(__FILE__) . 'inc/custom-event-calendar-settings.php';
 require_once plugin_dir_path(__FILE__) . 'inc/custom-event-list.php';
 require_once plugin_dir_path(__FILE__) . 'inc/custom-event-data.php';
+require_once plugin_dir_path(__FILE__) . 'inc/custom-event-calendar-widget.php';
 
 // Define the function to create the custom events table
 function custom_event_calendar_create_table() {
@@ -58,6 +59,7 @@ function custom_event_calendar_scripts()
 add_action('wp_enqueue_scripts', 'custom_event_calendar_scripts');
 
 // Add inline CSS for background image
+/*
 function custom_event_calendar_inline_styles()
 {
     $background_image = get_option('custom_event_calendar_background_image');
@@ -92,35 +94,72 @@ function generate_inline_styles($background_color, $background_image, $text_colo
     }
     return $inline_style;
 }
+*/
 
 // Shortcode for displaying the calendar
 function custom_event_calendar_shortcode($atts)
 {
-    $calendar_layout = get_option('custom_event_calendar_layout');
+    return generate_custom_event_calendar($atts);
+}
+add_shortcode('custom_event_calendar', 'custom_event_calendar_shortcode');
+
+function generate_custom_event_calendar($atts)
+{
     $atts = shortcode_atts(
         array(
             'month' => date('m'), // Default to current month
             'year' => date('Y'), // Default to current year
+            'background_color' =>'',
+            'background_image' =>'',
+            'title_color' =>'',
+            'text_color' =>'',
+            'event_background_color' =>'',
+            'event_display' => 'icon',
         ),
         $atts
     );
     // Extract month and year from attributes
     $month = $atts['month'];
     $year = $atts['year'];
+    $background_color = isset($atts['background_color']) ? $atts['background_color'] : '';
+    $background_image = isset($atts['background_image']) ? $atts['background_image'] : '';
+    $title_color = isset($atts['title_color']) ? $atts['title_color'] : '';
+    $text_color = isset($atts['text_color']) ? $atts['text_color'] : '';
+    $event_background_color = isset($atts['event_background_color']) ? $atts['event_background_color'] : '';
+    $event_display = isset($atts['event_display']) ? $atts['event_display'] : 'icon';
 
-    return generate_custom_event_calendar($month, $year, $calendar_layout);
-}
-add_shortcode('custom_event_calendar', 'custom_event_calendar_shortcode');
+    
+    $inline_style = '';
+    if (!empty($background_color)) {
+        $inline_style .= 'background-color: ' . esc_attr($background_color) . ';';
+    }
+    if (!empty($background_image)) {
+        $background_image_url = wp_get_attachment_url($background_image);
+        $inline_style .= 'background-image: url(\'' . esc_url($background_image_url) . '\');';
+    }
+    
+    if (!empty($inline_style)) {
+        $calendar_html = '<div class="custom-event-calendar" style="' . $inline_style . '">';
+    } else {
+        $calendar_html = '<div class="custom-event-calendar">';
+    }    
 
-function generate_custom_event_calendar($month, $year, $calendar_layout)
-{
     global $month_zh;
-    $calendar_html = '<div class="custom-event-calendar">';
     // Get the current month name based on the locale
     $current_month = $month_zh[intval($month)] . ' ' . date('F', mktime(0, 0, 0, $month, 1, $year));
-    $calendar_html .= '<h2 class="calendar-title">' . $current_month . ' ' . $year . '</h2>'; // Add title with month and year
+
+
+    $title_color = isset($atts['title_color']) ? $atts['title_color'] : '';
+    if (!empty($title_color)){
+        $calendar_html .= '<h2 class="calendar-title" style="color: ' . $title_color . '!important;">'; 
+    }
+    else{
+        $calendar_html .= '<h2 class="calendar-title">';
+    }
+
+    $calendar_html .= $current_month . ' ' . $year . '</h2>'; // Add title with month and year
     $calendar_html .= generateEventCalendarControl($month, $year);
-    $calendar_html .= generateEventsCalendar($month, $year);
+    $calendar_html .= generateEventsCalendar($month, $year, $text_color, $event_background_color, $event_display);
     $calendar_html .= '</div>';
 
     return $calendar_html;
@@ -184,21 +223,29 @@ function generateEventCalendarControl($month, $year)
     return $calendar_html;
 }
 
-function generateEventsCalendar($month, $year)
+function generateEventsCalendar($month, $year, $text_color, $event_background_color, $event_display)
 {
     // Generate calendar container
     $events_data = get_events_data();
+
+    $text_inline_style = '';
+
+    if (!empty($text_color)){
+        $text_inline_style .= ' style="color:' . $text_color . '"';
+    }
+
+
     $calendar_html = '<div class="calendar-container">';
     $calendar_html .= '<div class="happy-birthday-animation" id="happy-birthday-animation"><h2 style="color:red;">Happy Birthday Boss!!!</div>';
     // Generate calendar header
     $calendar_html .= '<div class="calendar-header">';
-    $calendar_html .= '<div class="header-day">周日<br/>Sun</div>';
-    $calendar_html .= '<div class="header-day">周一<br/>Mon</div>';
-    $calendar_html .= '<div class="header-day">周二<br/>Tue</div>';
-    $calendar_html .= '<div class="header-day">周三<br/>Wed</div>';
-    $calendar_html .= '<div class="header-day">周四<br/>Thu</div>';
-    $calendar_html .= '<div class="header-day">周五<br/>Fri</div>';
-    $calendar_html .= '<div class="header-day">周六<br/>Sat</div>';
+    $calendar_html .= '<div class="header-day"' . $text_inline_style . '>周日<br/>Sun</div>';
+    $calendar_html .= '<div class="header-day"' . $text_inline_style . '>周一<br/>Mon</div>';
+    $calendar_html .= '<div class="header-day"' . $text_inline_style . '>周二<br/>Tue</div>';
+    $calendar_html .= '<div class="header-day"' . $text_inline_style . '>周三<br/>Wed</div>';
+    $calendar_html .= '<div class="header-day"' . $text_inline_style . '>周四<br/>Thu</div>';
+    $calendar_html .= '<div class="header-day"' . $text_inline_style . '>周五<br/>Fri</div>';
+    $calendar_html .= '<div class="header-day"' . $text_inline_style . '>周六<br/>Sat</div>';
     $calendar_html .= '</div>'; // close calendar-header
 
     // Generate calendar body
@@ -247,31 +294,29 @@ function generateEventsCalendar($month, $year)
         }
 
          // Determine the color for the day based on the number of events
+
+         $event_inline_style = '';
+         if (!empty($event_background_color)){
+             $event_inline_style .= ' style="background-color:' . $event_background_color . '"';
+         }
          $color_class = 'color-' . $event_count;
-        // Add the day cell with events
-        $calendar_html .= '<div class="calendar-cell event ' . $color_class . '">';
-        $calendar_html .= '<span class=day ' . $special_class . '">' . $day . '</span>';
+        if($event_display == 'icon' && $event_count > 0){
+            // add color to cell only when displaying icons
+            $calendar_html .= '<div class="calendar-cell event ' . $color_class . '" ' . $event_inline_style . '>';
+        }else{
+            $calendar_html .= '<div class="calendar-cell event">';
+        }       
+        $calendar_html .= '<span class=day ' . $special_class .  $text_inline_style . '">' . $day . '</span>';
 
         // Display events for the day
         if ( $event_count > 0){
-	        $calendar_html .= '<div class="event-group">';
-
-            if ($bossBDayEvent){
-                $calendar_html .= '<div class="event has-event" title="' . $bossBDayEvent["title"] . '"><a href="javascript:startBirthdayAnimation();" >';
-                $calendar_html .= '<i class="fas fa-birthday-cake"></i></a></div>';
+            if($event_display == 'text'){
+                $calendar_html .= generateDayEventsAsText($bossBDayEvent, $day_events,  $event_inline_style);
+            }
+            else{
+                $calendar_html .= generateDayEventsAsIcon($bossBDayEvent, $day_events,  $event_inline_style);
             }
 
-            foreach ($day_events as $event) {
-                $calendar_html .= '<div class="event has-event" title="' . $event["title"] . '">';
-                $event_icon = isset($event["icon"]) ? $event["icon"] : "fa-calendar";
-                if(isset($event["url"]) && !empty($event["url"])){
-                    $calendar_html .= '<a href="' . $event["url"] . '">';
-                    $calendar_html .= '<i class="fas ' . $event_icon . '"></i></a></div>';
-                } else {
-                    $calendar_html .= '<i class="fas ' . $event_icon . '"></i></div>';
-                }                        
-            }
-            $calendar_html .= '</div>'; //event-group
         }             
         $calendar_html .= '</div>'; //calendar-cell
 
@@ -297,6 +342,51 @@ function generateEventsCalendar($month, $year)
     return $calendar_html;
 }
 
+function generateDayEventsAsText($bossBDayEvent, $day_events, $event_inline_style){
+    $events_html = '<div class="event-group">';
+
+    if ($bossBDayEvent){
+        $events_html .= '<div class="event has-event-text" title="' . $bossBDayEvent["title"] . '"><a href="javascript:startBirthdayAnimation();" >';
+        $events_html .= $bossBDayEvent["title"] . '</a></div>';
+    }
+
+    foreach ($day_events as $event) {
+        $events_html .= '<div class="event has-event-text" title="' . $event["title"] . '"' . $event_inline_style. '>';
+        $event_icon = isset($event["icon"]) ? $event["icon"] : "fa-calendar";
+        if(isset($event["url"]) && !empty($event["url"])){
+            $events_html .= '<a href="' . $event["url"] . '">';
+            $events_html .= $event["title"] . '</a></div>';
+        } else {
+            $events_html .=  $event["title"] . '</div>';
+        }                        
+    }
+    $events_html .= '</div>'; //event-group
+
+    return $events_html;
+}
+function generateDayEventsAsIcon($bossBDayEvent, $day_events, $event_background_color){
+    $events_html = '<div class="event-group">';
+
+    if ($bossBDayEvent){
+        $events_html .= '<div class="event has-event-icon" title="' . $bossBDayEvent["title"] . '"><a href="javascript:startBirthdayAnimation();" >';
+        $events_html .= '<i class="fas fa-birthday-cake"></i></a></div>';
+    }
+
+    foreach ($day_events as $event) {
+        $events_html .= '<div class="event has-event-icon" title="' . $event["title"] . '">';
+        $event_icon = isset($event["icon"]) ? $event["icon"] : "fa-calendar";
+        if(isset($event["url"]) && !empty($event["url"])){
+            $events_html .= '<a href="' . $event["url"] . '">';
+            $events_html .= '<i class="fas ' . $event_icon . '"></i></a></div>';
+        } else {
+            $events_html .= '<i class="fas ' . $event_icon . '"></i></div>';
+        }                        
+    }
+    $events_html .= '</div>'; //event-group        
+    
+    return $events_html;
+}
+
 // Enqueue necessary scripts and localize AJAX URL
 // Hook function to handle AJAX request for logged-in users
 
@@ -318,36 +408,4 @@ function custom_event_calendar_ajax_handler()
     echo $content; // Output shortcode content
     exit(); // Always exit after AJAX request handling
 
-}
-
-// Handle AJAX request to update calendar preview
-add_action('wp_ajax_update_calendar_preview', 'update_calendar_preview');
-function update_calendar_preview()
-{
-    // Get the values sent from the client-side
-    $background_image = isset($_POST['background_image']) ? sanitize_text_field($_POST['background_image']) : '';
-    $background_color = isset($_POST['background_color']) ? sanitize_text_field($_POST['background_color']) : '';
-    $layout_type = isset($_POST['layout_type']) ? sanitize_text_field($_POST['layout_type']) : '';
-    $text_color = isset($_POST['text_color']) ? sanitize_text_field($_POST['text_color']) : '';
-
-    // Generate the updated calendar content based on the values
-    $updated_calendar_content = generate_updated_calendar_content($background_image, $background_color, $text_color, $layout_type);
-
-    // Output the updated calendar content
-    echo $updated_calendar_content;
-
-    // Make sure to exit
-    exit();
-}
-
-// Function to generate updated calendar content
-function generate_updated_calendar_content($background_image, $background_color, $text_color, $layout_type)
-{
-    // Generate the calendar content based on the values
-    // You need to implement this function based on how your calendar content is generated
-    $calendar_content = ''; // Placeholder
-
-    $calendar_content .= generate_inline_styles($background_color, $background_image, $text_color);
-    $calendar_content .= generate_custom_event_calendar(date('m'), date('Y'), $layout_type);
-    return $calendar_content;
 }

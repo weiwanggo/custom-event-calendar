@@ -3,6 +3,8 @@
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    background-size: cover;
+    background-position: center;
 }
 
 .calendar-controls {
@@ -110,9 +112,22 @@
 
 
 /* Calendar cell with events */
-.calendar-cell.has-event {
-    background-color: #ffcccb;
-    /* Example background color for cells with events */
+.has-event-text {
+    background-color: #bbd6de;
+    border-radius: 3px;
+    padding-left:  2px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 12px;
+    font-weight: bolder;
+    text-overflow: ellipsis;
+}
+
+.has-event-icon{
+    flex: 1 0 calc(33% - 10px); /* Distributes available space equally among the flex items with a maximum of 4 items per row */
+    max-width: calc(33% - 10px); /* Sets the maximum width for each flex item */
+    margin-right: 10px;
 }
 
 /* Day number */
@@ -138,10 +153,7 @@
     padding: 5px;
 }
 
-/* Show tooltip on hover */
-.event:hover .tooltip {
-    display: block;
-}
+
 
 .color-1 {
     background-color:rgba(182, 195, 243, 0.5); 
@@ -312,18 +324,7 @@
     }
 }
 
-/* Apply styles to the tooltip */
-.event[title]:hover::after {
-    content: attr(title);  /* Use the 'title' attribute as content */
-    position: absolute;  /* Position the tooltip */
-    background-color: #333;  /* Background color */
-    color: #fff;  /* Text color */
-    padding: 5px;  /* Add padding */
-    border-radius: 5px;  /* Add rounded corners */
-    font-size: 14px;  /* Font size */
-    z-index: 1;  /* Ensure tooltip is on top of other elements */
-    /* Additional styling properties as needed */
-}
+
 
 .calendar-container {
     background-color: rgba(255, 255, 255, 0.6);
@@ -335,9 +336,4 @@
 .event-group {
     display:flex;
     flex-wrap: wrap;
-}
-.has-event{
-    flex: 1 0 calc(33% - 10px); /* Distributes available space equally among the flex items with a maximum of 4 items per row */
-    max-width: calc(33% - 10px); /* Sets the maximum width for each flex item */
-    margin: 5px; /* Adds margin between flex items */
 }
