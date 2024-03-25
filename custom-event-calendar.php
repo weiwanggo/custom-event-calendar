@@ -128,7 +128,26 @@ function generate_custom_event_calendar($atts)
     $event_background_color = isset($atts['event_background_color']) ? $atts['event_background_color'] : '';
     $event_display = isset($atts['event_display']) ? $atts['event_display'] : 'icon';
 
-    
+    $data_attributes = '';
+    if ($background_color) {
+        $data_attributes .=  ' background_color="' .  $background_color . '"';
+    }
+    if ($background_image) {
+        $data_attributes .=  ' background_image="' .  $background_image . '"';
+    }
+    if ($title_color) {
+        $data_attributes .=  ' title_color="' .  $title_color . '"';
+    }
+    if ($text_color) {
+        $data_attributes .=  ' text_color="' .  $text_color . '"';
+    }
+    if ($event_background_color) {
+        $data_attributes .=  ' event_background_color="' .  $event_background_color . '"';
+    }
+    if ($event_display) {
+        $data_attributes .=  ' event_display="' .  $event_display . '"';
+    }
+
     $inline_style = '';
     if (!empty($background_color)) {
         $inline_style .= 'background-color: ' . esc_attr($background_color) . ';';
@@ -139,9 +158,9 @@ function generate_custom_event_calendar($atts)
     }
     
     if (!empty($inline_style)) {
-        $calendar_html = '<div class="custom-event-calendar" style="' . $inline_style . '">';
+        $calendar_html = '<div id="calendar-container" class="custom-event-calendar" style="' . $inline_style . '"' . $data_attributes . '>';
     } else {
-        $calendar_html = '<div class="custom-event-calendar">';
+        $calendar_html = '<div id="calendar-container" class="custom-event-calendar"' . $data_attributes . '>';
     }    
 
     global $month_zh;

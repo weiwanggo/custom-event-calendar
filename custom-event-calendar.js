@@ -1,7 +1,18 @@
 jQuery(document).ready(function ($) {
     // Function to update the calendar
     function updateCalendar(month, year) {
-        var shortcode = "[custom_event_calendar month='" + month + "' year='" + year + "']";
+        //var shortcode = "[custom_event_calendar month='" + month + "' year='" + year + "']";
+        var shortcode = "[custom_event_calendar ";
+        shortcode += "month='" + month + "' ";
+        shortcode += "year='" + year + "' ";
+        shortcode += "background_color='" + $('#calendar-container').attr('background_color') + "' ";
+        shortcode += "background_image='" + $('#calendar-container').attr('background_image') + "' ";
+        shortcode += "title_color='" + $('#calendar-container').attr('title_color') + "' ";
+        shortcode += "text_color='" + $('#calendar-container').attr('text_color') + "' ";
+        shortcode += "event_background_color='" + $('#calendar-container').attr('event_background_color') + "' ";
+        shortcode += "event_display='" + $('#calendar-container').attr('event_display') + "' ";
+        shortcode += "]";
+
         $.ajax({
             type: 'GET',
             url: custom_event_calendar_ajax.ajaxurl,
