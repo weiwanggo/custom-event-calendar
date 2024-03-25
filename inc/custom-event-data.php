@@ -19,7 +19,7 @@ function get_events_data()
 
         wp_cache_set($cache_key, $all_event_data, $cache_group, 18000);
     } else {
-        error_log('events from cache is not empty' . count($all_event_data));
+        //error_log('events from cache is not empty' . count($all_event_data));
     }
 
     return $all_event_data; // Return the complete events data
