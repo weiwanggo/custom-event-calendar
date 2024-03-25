@@ -129,6 +129,14 @@
     max-width: calc(33% - 10px); /* Sets the maximum width for each flex item */
     margin-right: 10px;
 }
+.has-event-icon i {
+    display: block;
+    margin-bottom: 2px;
+    /* Add some space between icon and text */
+}
+.special_day {
+    color: red!important;
+}
 
 /* Day number */
 .day {
@@ -172,28 +180,6 @@
     /* Let empty cells grow to fill the remaining space */
     width: auto;
     /* Set width to auto to allow flexibility */
-}
-
-.calendar {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.calendar .event {
-    position: relative;
-    /* Enable positioning of tooltip */
-    overflow: hidden;
-    /* Hide overflowing content */
-}
-
-.has-event i {
-    display: block;
-    margin-bottom: 2px;
-    /* Add some space between icon and text */
-}
-
-.special_day {
-    color: red!important;
 }
 
 .calendar-controls select {

@@ -121,43 +121,43 @@ function generate_custom_event_calendar($atts)
     // Extract month and year from attributes
     $month = $atts['month'];
     $year = $atts['year'];
-    $background_color = isset($atts['background_color']) ? $atts['background_color'] : '';
-    $background_image = isset($atts['background_image']) ? $atts['background_image'] : '';
-    $title_color = isset($atts['title_color']) ? $atts['title_color'] : '';
-    $text_color = isset($atts['text_color']) ? $atts['text_color'] : '';
-    $event_background_color = isset($atts['event_background_color']) ? $atts['event_background_color'] : '';
+    $background_color = isset($atts['background_color']) ? $atts['background_color'] : null;
+    $background_image = isset($atts['background_image']) ? $atts['background_image'] : null;
+    $title_color = isset($atts['title_color']) ? $atts['title_color'] : null;
+    $text_color = isset($atts['text_color']) ? $atts['text_color'] : null;
+    $event_background_color = isset($atts['event_background_color']) ? $atts['event_background_color'] : null;
     $event_display = isset($atts['event_display']) ? $atts['event_display'] : 'icon';
 
     $data_attributes = '';
-    if ($background_color) {
+    if (isset($background_color)) {
         $data_attributes .=  ' background_color="' .  $background_color . '"';
     }
-    if ($background_image) {
+    if (isset($background_image)) {
         $data_attributes .=  ' background_image="' .  $background_image . '"';
     }
-    if ($title_color) {
+    if (isset($title_color)) {
         $data_attributes .=  ' title_color="' .  $title_color . '"';
     }
-    if ($text_color) {
+    if (isset($text_color)) {
         $data_attributes .=  ' text_color="' .  $text_color . '"';
     }
-    if ($event_background_color) {
+    if (isset($event_background_color)) {
         $data_attributes .=  ' event_background_color="' .  $event_background_color . '"';
     }
-    if ($event_display) {
+    if (isset($event_display)) {
         $data_attributes .=  ' event_display="' .  $event_display . '"';
     }
 
     $inline_style = '';
-    if (!empty($background_color)) {
+    if (isset($background_color)) {
         $inline_style .= 'background-color: ' . esc_attr($background_color) . ';';
     }
-    if (!empty($background_image)) {
+    if (isset($background_image)) {
         $background_image_url = wp_get_attachment_url($background_image);
         $inline_style .= 'background-image: url(\'' . esc_url($background_image_url) . '\');';
     }
     
-    if (!empty($inline_style)) {
+    if (isset($inline_style)) {
         $calendar_html = '<div id="calendar-container" class="custom-event-calendar" style="' . $inline_style . '"' . $data_attributes . '>';
     } else {
         $calendar_html = '<div id="calendar-container" class="custom-event-calendar"' . $data_attributes . '>';
@@ -168,8 +168,8 @@ function generate_custom_event_calendar($atts)
     $current_month = $month_zh[intval($month)] . ' ' . date('F', mktime(0, 0, 0, $month, 1, $year));
 
 
-    $title_color = isset($atts['title_color']) ? $atts['title_color'] : '';
-    if (!empty($title_color)){
+    $title_color = isset($atts['title_color']) ? $atts['title_color'] : null;
+    if (isset($title_color)){
         $calendar_html .= '<h2 class="calendar-title" style="color: ' . $title_color . '!important;">'; 
     }
     else{
@@ -249,7 +249,7 @@ function generateEventsCalendar($month, $year, $text_color, $event_background_co
 
     $text_inline_style = '';
 
-    if (!empty($text_color)){
+    if (isset($text_color) && !empty($text_color)){
         $text_inline_style .= ' style="color:' . $text_color . '"';
     }
 
@@ -325,7 +325,7 @@ function generateEventsCalendar($month, $year, $text_color, $event_background_co
         }else{
             $calendar_html .= '<div class="calendar-cell event">';
         }       
-        $calendar_html .= '<span class=day ' . $special_class .  $text_inline_style . '">' . $day . '</span>';
+        $calendar_html .= '<span class="day ' . $special_class . '"' .  $text_inline_style . '>' . $day . '</span>';
 
         // Display events for the day
         if ( $event_count > 0){
