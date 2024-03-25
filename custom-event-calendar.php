@@ -371,7 +371,6 @@ function generateDayEventsAsText($bossBDayEvent, $day_events, $event_inline_styl
 
     foreach ($day_events as $event) {
         $events_html .= '<div class="event has-event-text" title="' . $event["title"] . '"' . $event_inline_style. '>';
-        $event_icon = isset($event["icon"]) ? $event["icon"] : "fa-calendar";
         if(isset($event["url"]) && !empty($event["url"])){
             $events_html .= '<a href="' . $event["url"] . '">';
             $events_html .= $event["title"] . '</a></div>';
@@ -388,7 +387,7 @@ function generateDayEventsAsIcon($bossBDayEvent, $day_events, $event_background_
 
     if ($bossBDayEvent){
         $events_html .= '<div class="event has-event-icon" title="' . $bossBDayEvent["title"] . '"><a href="javascript:startBirthdayAnimation();" >';
-        $events_html .= '<i class="fas fa-birthday-cake"></i></a></div>';
+        $events_html .= '<i class="fas fa-birthday-cake fa-sm"></i></a></div>';
     }
 
     foreach ($day_events as $event) {
@@ -396,9 +395,9 @@ function generateDayEventsAsIcon($bossBDayEvent, $day_events, $event_background_
         $event_icon = isset($event["icon"]) ? $event["icon"] : "fa-calendar";
         if(isset($event["url"]) && !empty($event["url"])){
             $events_html .= '<a href="' . $event["url"] . '">';
-            $events_html .= '<i class="fas ' . $event_icon . '"></i></a></div>';
+            $events_html .= '<i class="fas ' . $event_icon . ' fa-sm"></i></a></div>';
         } else {
-            $events_html .= '<i class="fas ' . $event_icon . '"></i></div>';
+            $events_html .= '<i class="fas ' . $event_icon . ' fa-sm"></i></div>';
         }                        
     }
     $events_html .= '</div>'; //event-group        
