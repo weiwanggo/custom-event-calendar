@@ -19,10 +19,10 @@ function register_custom_calendar_vc_element() {
                 'description' => __('Upload or select a background image for the calendar', 'text-domain'),
             ),
             array(
-                'type' => 'colorpicker',
+                'type' => 'textfield',
                 'heading' => __('Title Color', 'text-domain'),
                 'param_name' => 'title_color',
-                'description' => __('Choose title color for the calendar', 'text-domain'),
+                'description' => __('Enter title color for the calendar, RGBA format (e.g., rgba(255, 0, 0, 0.5) ', 'text-domain'),
             ),
             array(
                 'type' => 'colorpicker',
